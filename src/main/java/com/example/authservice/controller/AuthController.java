@@ -2,6 +2,7 @@ package com.example.authservice.controller;
 
 import com.example.authservice.model.Usuario;
 import com.example.authservice.service.UsuarioService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,15 +18,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<Usuario> register(@RequestBody Usuario usuario) {
-        //return ResponseEntity.ok(usuarioService.registrarUsuario(usuario));
-        System.out.println("Petición POST /register recibida");
-        Usuario usuarioRegistrado = usuarioService.registrarUsuario(usuario);
-        System.out.println("Usuario guardado: " + usuarioRegistrado);
-        if (usuarioRegistrado != null) {
-            return ResponseEntity.ok(usuarioRegistrado); // Devuelve el usuario registrado
-        } else {
-            return ResponseEntity.status(500).body(null); // Error si no se guarda
-        }
+        return ResponseEntity.ok(usuarioService.registrarUsuario(usuario));
     }
 
     @PostMapping("/login")
@@ -34,7 +27,8 @@ public class AuthController {
         if (autenticado) {
             return ResponseEntity.ok("Login exitoso");
         } else {
-            return ResponseEntity.status(401).body("Credenciales inválidas");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
         }
     }
 }
+
